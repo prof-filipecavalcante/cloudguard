@@ -110,7 +110,7 @@ $('#flag-form').addEventListener('submit', event => {
   state.attempts[challengeId] = Number(state.attempts[challengeId] || 0) + 1; saveAttempts(state.student.registration, state.attempts); updateAttempts();
   if (checkAnswer(challenge, answer)) {
     if (!state.completed.includes(challenge.id)) { state.completed.push(challenge.id); saveStudentProgress(state.student.registration, state.completed); renderStats(); renderChallenges(); }
-    $('#feedback').textContent = `✓ Flag correta. +${challenge.xp} XP adicionados à sua missão. ${challenge.explanation}`; $('#feedback').className = 'feedback success'; showToast('Desafio concluído.');
+    $('#feedback').textContent = `✓ Flag correta. +${challenge.xp} XP adicionados à sua missão. ${challenge.explanation}`; $('#feedback').className = 'feedback success'; $('#challenge-modal').classList.remove('challenge-success'); void $('#challenge-modal').offsetWidth; $('#challenge-modal').classList.add('challenge-success'); const completedRow = document.querySelector(`.open-challenge[data-id="${challenge.id}"]`)?.closest('.challenge-row'); completedRow?.classList.add('challenge-completed-pop'); showToast('Desafio concluído.');
   } else { $('#feedback').textContent = state.attempts[challengeId] >= 3 ? '✕ Limite de 3 tentativas atingido neste desafio.' : '✕ Flag incorreta. Tente novamente.'; $('#feedback').className = 'feedback error'; }
   $('#submit-button').disabled = state.attempts[challengeId] >= 3;
 });
