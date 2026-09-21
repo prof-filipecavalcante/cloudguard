@@ -1,0 +1,116 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#071018">
+  <meta name="referrer" content="strict-origin-when-cross-origin">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data:; connect-src 'none'; object-src 'none'; base-uri 'none'; form-action 'self';">
+  <title>CloudGuard Lab | Segurança em Nuvem</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <section id="login-screen" class="login-screen">
+    <div class="login-visual" aria-hidden="true"><div class="login-grid"></div><div class="login-orbit"></div><div class="login-core">☁</div><span class="login-code code-one">IAM / 01</span><span class="login-code code-two">SECURE_ACCESS</span></div>
+    <div class="login-panel">
+      <div class="brand login-brand"><div class="brand-mark">⌁</div><div><strong>CloudGuard</strong><span>LAB / AULA 01</span></div></div>
+      <p class="eyebrow">ACESSO DO ALUNO <span></span> CLOUD SECURITY</p>
+      <h1>Entre para<br><em>começar.</em></h1>
+      <p class="login-copy">Use sua matrícula institucional para acessar os desafios da aula.</p>
+      <form id="login-form" class="login-form">
+        <label for="registration-input">Matrícula</label>
+        <input id="registration-input" type="text" inputmode="numeric" maxlength="8" autocomplete="off" placeholder="Ex.: 00000000" required>
+        <button class="primary-button" type="submit">Acessar laboratório <span>→</span></button>
+        <div id="login-feedback" class="feedback" role="alert"></div>
+      </form>
+      <small class="login-note">Acesso restrito à turma · 3 tentativas de resposta por aluno</small>
+    </div>
+  </section>
+  <div class="app-shell">
+    <aside class="sidebar">
+      <div class="brand">
+        <div class="brand-mark">⌁</div>
+        <div>
+          <strong>CloudGuard</strong>
+          <span>LAB </span>
+        </div>
+      </div>
+
+      <div class="sidebar-label">NAVEGAÇÃO</div>
+      <nav class="nav-list" aria-label="Navegação principal">
+        <button class="nav-item active" data-view="dashboard"><span class="nav-icon">▦</span> Visão geral</button>
+        <button class="nav-item" data-view="challenges"><span class="nav-icon">⌁</span> Desafios</button>
+      </nav>
+
+      <div class="sidebar-label difficulty-label">DIFICULDADE</div>
+      <div class="difficulty-list">
+        <button class="filter-link" data-difficulty="all"><span class="dot all"></span> Todos <b id="all-count">12</b></button>
+        <button class="filter-link" data-difficulty="easy"><span class="dot easy"></span> Fácil <b id="easy-count">4</b></button>
+        <button class="filter-link" data-difficulty="medium"><span class="dot medium"></span> Médio <b id="medium-count">4</b></button>
+        <button class="filter-link" data-difficulty="hard"><span class="dot hard"></span> Difícil <b id="hard-count">4</b></button>
+      </div>
+
+      <div class="sidebar-footer">
+        <div class="teacher-chip"><span class="avatar" id="student-avatar">AL</span><span><strong id="student-name">Aluno</strong><small id="student-registration">Matrícula</small></span></div>
+        <span class="version">v1.0 · offline ready</span>
+      </div>
+    </aside>
+
+    <main class="main-content">
+      <header class="topbar">
+        <div class="breadcrumb"><span>LABORATÓRIO</span><i>/</i><strong id="current-breadcrumb">VISÃO GERAL</strong></div>
+        <div class="topbar-actions"><span class="status-dot"></span><span class="timer-label">TEMPO <strong id="timer-display">25:00</strong></span><span id="attempts-indicator">3 tentativas restantes</span><button class="reset-button" id="logout-button">Sair</button></div>
+      </header>
+
+      <section id="dashboard-view" class="view active-view">
+        <div class="hero-block">
+          <div>
+            <p class="eyebrow">MISSÃO 01 <span></span> CLOUD SECURITY</p>
+            <h1>Proteja a nuvem.<br><em>Domine o risco.</em></h1>
+            <p class="hero-copy">Uma jornada prática pelos fundamentos de segurança da informação, identidade e cloud computing.</p>
+            <button class="primary-button" id="start-learning">Começar desafio <span>→</span></button>
+          </div>
+          <div class="hero-visual" aria-hidden="true"><div class="orbit orbit-one"></div><div class="orbit orbit-two"></div><div class="cloud-symbol">☁</div><span class="visual-tag tag-one">IAM</span><span class="visual-tag tag-two">MFA</span><span class="visual-tag tag-three">CSPM</span></div>
+        </div>
+
+        <div class="section-heading"><div><p class="eyebrow">SEU PAINEL</p><h2>Progresso da missão</h2></div><span class="mission-count" id="mission-count">0 / 12 concluídos</span></div>
+        <div class="stats-grid">
+          <article class="stat-card progress-card"><div class="stat-top"><span>PROGRESSO TOTAL</span><strong id="progress-percent">0%</strong></div><div class="progress-track"><div id="progress-bar" class="progress-fill"></div></div><small>Continue de onde parou.</small></article>
+          <article class="stat-card"><span>FLAGS CAPTURADAS</span><strong id="flags-count">0</strong><small>de 12 desafios</small></article>
+          <article class="stat-card"><span>XP ACUMULADO</span><strong id="xp-count">0</strong><small>pontos de experiência</small></article>
+        </div>
+
+        <div class="section-heading challenges-heading"><div><p class="eyebrow">PRÓXIMA ETAPA</p><h2>Escolha seu nível</h2></div><button class="text-button" data-view="challenges">Ver todos →</button></div>
+        <div class="level-grid">
+          <button class="level-card easy-card" data-difficulty="easy"><span class="level-number">01</span><div><span class="level-name">Fácil</span><p>Conceitos essenciais e primeiros passos.</p></div><span class="level-arrow">↗</span></button>
+          <button class="level-card medium-card" data-difficulty="medium"><span class="level-number">02</span><div><span class="level-name">Médio</span><p>Analise configurações e tome decisões.</p></div><span class="level-arrow">↗</span></button>
+          <button class="level-card hard-card" data-difficulty="hard"><span class="level-number">03</span><div><span class="level-name">Difícil</span><p>Conecte as peças e pense como um defensor.</p></div><span class="level-arrow">↗</span></button>
+        </div>
+      </section>
+
+      <section id="challenges-view" class="view">
+        <div class="page-intro"><div><p class="eyebrow">BANCO DE DESAFIOS</p><h1>Aprender fazendo.</h1><p>Leia o cenário, raciocine como um analista e envie a flag correta.</p></div><div class="challenge-total"><strong id="challenge-total">12</strong><span>desafios ativos</span></div></div>
+        <div class="challenge-toolbar"><div class="segmented-control"><button class="segment active" data-filter="all">Todos</button><button class="segment" data-filter="easy">Fácil</button><button class="segment" data-filter="medium">Médio</button><button class="segment" data-filter="hard">Difícil</button></div><label class="search-box"><span>⌕</span><input id="challenge-search" type="search" placeholder="Buscar por tema ou título..."></label></div>
+        <div id="challenge-list" class="challenge-list"></div>
+      </section>
+
+      <div id="challenge-modal" class="modal-backdrop" hidden>
+        <div class="challenge-modal" role="dialog" aria-modal="true" aria-labelledby="modal-title">
+          <button class="modal-close" id="modal-close" aria-label="Fechar desafio">×</button>
+          <div class="modal-meta"><span id="modal-difficulty" class="difficulty-badge">FÁCIL</span><span id="modal-category">FUNDAMENTOS</span><span id="modal-xp">+100 XP</span></div>
+          <h2 id="modal-title">Título do desafio</h2>
+          <p id="modal-description" class="modal-description"></p>
+          <div id="modal-hint" class="hint-box" hidden><span>?</span><p></p></div>
+          <form id="flag-form"><label for="flag-input">Sua resposta <span>FLAG</span></label><div class="flag-input-wrap"><span>flag{</span><input id="flag-input" autocomplete="off" spellcheck="false" placeholder="digite_a_resposta"><span>}</span></div><button id="submit-button" class="primary-button submit-button" type="submit">Validar flag <span>↗</span></button><small id="modal-attempts" class="attempt-note"></small></form>
+          <div id="feedback" class="feedback" role="status"></div>
+        </div>
+      </div>
+      <div id="toast" class="toast" role="status"></div>
+    </main>
+  </div>
+  <script type="module" src="src/app.js"></script>
+</body>
+</html>
