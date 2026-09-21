@@ -3,7 +3,7 @@ import { authenticate, resumeSession, signIn, signOut } from './services/auth.js
 import { loadStudentProgress, saveAttempts, saveStudentProgress } from './services/storage.js';
 import { formatTime, remainingMs } from './services/timer.js';
 
-const state = { student: null, completed: [], attempts: 0, deadline: 0, filter: 'all', search: '' };
+const state = { student: null, completed: [], attempts: {}, deadline: 0, activeChallengeId: null, filter: 'all', search: '' };
 const $ = selector => document.querySelector(selector);
 const all = selector => [...document.querySelectorAll(selector)];
 
@@ -21,9 +21,10 @@ function updateTimer() {
   if (left === 0) all('.submit-button').forEach(button => { button.disabled = true; });
 }
 function updateAttempts() {
-  const left = Math.max(0, 3 - state.attempts);
+  const used = state.activeChallengeId ? Number(state.attempts[state.activeChallengeId] || 0) : 0;
+  const left = Math.max(0, 3 - used);
   const label = `${left} tentativa${left === 1 ? '' : 's'} restante${left === 1 ? '' : 's'}`;
-  $('#attempts-indicator').textContent = label;
+  $('#attempts-indicator').textContent = '3 tentativas por desafio';
   $('#modal-attempts').textContent = label;
 }
 function renderStats() {
@@ -64,11 +65,13 @@ function openChallenge(id) {
   $('#modal-hint').hidden = !challenge.hint;
   $('#modal-hint p').textContent = challenge.hint;
   $('#flag-form').dataset.challengeId = id;
+  state.activeChallengeId = id;
   $('#flag-input').value = '';
   $('#feedback').textContent = '';
   $('#feedback').className = 'feedback';
   updateAttempts();
-  $('#submit-button').disabled = state.attempts >= 3 || remainingMs(state.deadline) === 0;
+  updateAttempts();
+  $('#submit-button').disabled = Number(state.attempts[id] || 0) >= 3 || remainingMs(state.deadline) === 0;
   $('#challenge-modal').hidden = false;
   setTimeout(() => $('#flag-input').focus(), 0);
 }
@@ -100,15 +103,16 @@ $('#challenge-modal').addEventListener('click', event => { if (event.target.id =
 document.addEventListener('keydown', event => { if (event.key === 'Escape') closeChallenge(); });
 $('#flag-form').addEventListener('submit', event => {
   event.preventDefault();
-  if (!state.student || state.attempts >= 3 || remainingMs(state.deadline) === 0) return;
-  const challenge = challenges.find(item => item.id === Number(event.currentTarget.dataset.challengeId));
+  const challengeId = Number(event.currentTarget.dataset.challengeId);
+  const challenge = challenges.find(item => item.id === challengeId);
+  if (!state.student || !challenge || Number(state.attempts[challengeId] || 0) >= 3 || remainingMs(state.deadline) === 0) return;
   const answer = $('#flag-input').value.trim().toLowerCase().replace(/^flag\{/, '').replace(/\}$/, '');
-  state.attempts += 1; saveAttempts(state.student.registration, state.attempts); updateAttempts();
+  state.attempts[challengeId] = Number(state.attempts[challengeId] || 0) + 1; saveAttempts(state.student.registration, state.attempts); updateAttempts();
   if (checkAnswer(challenge, answer)) {
     if (!state.completed.includes(challenge.id)) { state.completed.push(challenge.id); saveStudentProgress(state.student.registration, state.completed); renderStats(); renderChallenges(); }
     $('#feedback').textContent = `✓ Flag correta. +${challenge.xp} XP adicionados à sua missão. ${challenge.explanation}`; $('#feedback').className = 'feedback success'; showToast('Desafio concluído.');
-  } else { $('#feedback').textContent = state.attempts >= 3 ? '✕ Limite de tentativas atingido para esta matrícula.' : '✕ Flag incorreta. Tente novamente.'; $('#feedback').className = 'feedback error'; }
-  $('#submit-button').disabled = state.attempts >= 3;
+  } else { $('#feedback').textContent = state.attempts[challengeId] >= 3 ? '✕ Limite de 3 tentativas atingido neste desafio.' : '✕ Flag incorreta. Tente novamente.'; $('#feedback').className = 'feedback error'; }
+  $('#submit-button').disabled = state.attempts[challengeId] >= 3;
 });
 
 setInterval(updateTimer, 1000);
