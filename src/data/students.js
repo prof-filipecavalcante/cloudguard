@@ -25,7 +25,6 @@ const names = {
   '99999994': 'Aluno Teste 05',
   '99999995': 'Aluno Teste 06',
   '99999996': 'Aluno Teste 07',
-  '01050763': 'Peofessor Filipe'
   '99999998': 'Aluno Teste 09',
   '99999999': 'Aluno Teste 10'
 };
