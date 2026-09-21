@@ -77,6 +77,7 @@ function openChallenge(id) {
 }
 function closeChallenge() { $('#challenge-modal').hidden = true; }
 function showToast(message) { const toast = $('#toast'); toast.textContent = message; toast.classList.add('show'); setTimeout(() => toast.classList.remove('show'), 2800); }
+function showCaptureCelebration(xp) { const celebration = $('#capture-celebration'); $('#celebration-xp').textContent = `+${xp} XP`; celebration.classList.remove('active'); celebration.setAttribute('aria-hidden', 'false'); void celebration.offsetWidth; celebration.classList.add('active'); setTimeout(() => { celebration.classList.remove('active'); celebration.setAttribute('aria-hidden', 'true'); }, 1800); }
 function enterLab(student) {
   state.student = student;
   Object.assign(state, loadStudentProgress(student.registration));
@@ -110,7 +111,7 @@ $('#flag-form').addEventListener('submit', event => {
   state.attempts[challengeId] = Number(state.attempts[challengeId] || 0) + 1; saveAttempts(state.student.registration, state.attempts); updateAttempts();
   if (checkAnswer(challenge, answer)) {
     if (!state.completed.includes(challenge.id)) { state.completed.push(challenge.id); saveStudentProgress(state.student.registration, state.completed); renderStats(); renderChallenges(); }
-    $('#feedback').textContent = `✓ Flag correta. +${challenge.xp} XP adicionados à sua missão. ${challenge.explanation}`; $('#feedback').className = 'feedback success'; $('#challenge-modal').classList.remove('challenge-success'); void $('#challenge-modal').offsetWidth; $('#challenge-modal').classList.add('challenge-success'); const completedRow = document.querySelector(`.open-challenge[data-id="${challenge.id}"]`)?.closest('.challenge-row'); completedRow?.classList.add('challenge-completed-pop'); showToast('Desafio concluído.');
+    $('#feedback').textContent = `✓ Flag correta. +${challenge.xp} XP adicionados à sua missão. ${challenge.explanation}`; $('#feedback').className = 'feedback success'; $('#challenge-modal').classList.remove('challenge-success'); void $('#challenge-modal').offsetWidth; $('#challenge-modal').classList.add('challenge-success'); const completedRow = document.querySelector(`.open-challenge[data-id="${challenge.id}"]`)?.closest('.challenge-row'); completedRow?.classList.add('challenge-completed-pop'); showCaptureCelebration(challenge.xp); showToast('Desafio concluído.');
   } else { $('#feedback').textContent = state.attempts[challengeId] >= 3 ? '✕ Limite de 3 tentativas atingido neste desafio.' : '✕ Flag incorreta. Tente novamente.'; $('#feedback').className = 'feedback error'; }
   $('#submit-button').disabled = state.attempts[challengeId] >= 3;
 });
