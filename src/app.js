@@ -70,8 +70,9 @@ function openChallenge(id) {
   $('#feedback').textContent = '';
   $('#feedback').className = 'feedback';
   updateAttempts();
-  updateAttempts();
-  $('#submit-button').disabled = Number(state.attempts[id] || 0) >= 3 || remainingMs(state.deadline) === 0;
+  const attemptsExhausted = Number(state.attempts[id] || 0) >= 3;
+  $('#submit-button').disabled = attemptsExhausted || remainingMs(state.deadline) === 0;
+  if (attemptsExhausted) { $('#feedback').textContent = 'Este desafio atingiu o limite de 3 tentativas para esta matrícula.'; $('#feedback').className = 'feedback error'; }
   $('#challenge-modal').hidden = false;
   setTimeout(() => $('#flag-input').focus(), 0);
 }
